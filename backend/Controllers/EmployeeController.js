@@ -95,7 +95,7 @@ const deleteEmployeeById = async (req, res) => {
 };
 
 // update emp by id
-const createEmployee = async (req, res) => {
+const updateEmployeeId = async (req, res) => {
   try {
     const body = req.body;
 
@@ -124,4 +124,4 @@ const createEmployee = async (req, res) => {
 };
 
 
-module.exports = {createEmployee , getAllEmployees , getAllEmployeeById , deleteEmployeeById};
+module.exports = {createEmployee , getAllEmployees , getAllEmployeeById , deleteEmployeeById , updateEmployeeId};
