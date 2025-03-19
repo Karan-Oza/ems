@@ -57,12 +57,12 @@ const getAllEmployees = async (req, res) => {
       .limit(limit)
       .sort({ updatedAt: -1 });
 
-      if (emps.length === 0) {
-        return res.status(404).json({
-          message: "No employees found",
-          success: false,
-        });
-      }
+    if (emps.length === 0) {
+      return res.status(404).json({
+        message: "No employees found",
+        success: false,
+      });
+    }
 
     // Calculate total pages
     const totalPages = Math.ceil(totalEmployees / limit);
