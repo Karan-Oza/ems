@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeTable from "./EmployeeTable";
+import { GetAllEmployees } from "../api";
 
 const EmployeeManagementApp = () => {
   const [employeeData, setEmployeeData] = useState({
@@ -15,10 +16,10 @@ const EmployeeManagementApp = () => {
   const fetchEmployees = async (search = "", page = 1, limit = 5) => {
     try {
       const data = await GetAllEmployees(search, page, limit);
-      console.log(data);
       setEmployeeData(data);
+      console.log(data);
     } catch (err) {
-      alert("Error", err);
+      // alert("Error", err);
     }
   };
 

@@ -3,8 +3,11 @@ const express = require("express");
 const app = express();
 require("./Models/db");
 
+const cors = require("cors");
+
 const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const bodyParser = require("body-parser");
+app.use(cors());
 
 const PORT = process.env.PORT;
 

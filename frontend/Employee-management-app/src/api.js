@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:3002";
 
 export const GetAllEmployees = async (search = "", page = 1, limit = 5) => {
-  const url = `${BASE_URL}/api/employees?search=${search}&page=${page}&limit=${limit}`;
+  const url = `${BASE_URL}/api/employee/?search=${search}&page=${page}&limit=${limit}`;
   const options = {
     method: "GET",
     headers: {

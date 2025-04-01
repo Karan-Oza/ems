@@ -67,10 +67,18 @@ const getAllEmployees = async (req, res) => {
     // Calculate total pages
     const totalPages = Math.ceil(totalEmployees / limit);
 
-    res.status(201).json({
+    res.status(200).json({
       message: "All Employees",
       success: true,
-      data: emps,
+      data: {
+        employees: emps,
+        pagination: {
+          totalEmployees,
+          currentPage: page,
+          totalPages,
+          pageSize: limit,
+        },
+      },
     });
   } catch (err) {
     console.log("Error ", err);
