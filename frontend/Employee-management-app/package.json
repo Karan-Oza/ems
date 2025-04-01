@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.1.8",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "lucide-react": "^0.485.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
