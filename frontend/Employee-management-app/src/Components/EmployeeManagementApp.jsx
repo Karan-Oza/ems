@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import EmployeeTable from "./EmployeeTable";
 import { GetAllEmployees } from "../api";
 import "../App.css";
+import AddEmployee from "./AddEmployee";
 
 const EmployeeManagementApp = () => {
+  const [showModal, setShowModal] = useState(false);
   const [employeeData, setEmployeeData] = useState({
     employees: [],
     pagination: {
@@ -24,6 +26,12 @@ const EmployeeManagementApp = () => {
     }
   };
 
+
+  const handleAddEmployee =  ()=>{
+    setShowModal(true);
+  }
+
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -37,7 +45,7 @@ const EmployeeManagementApp = () => {
           style={{ maxWidth: "900px" }}
         >
           <div className="d-flex justify-content-between mb-3 employee-header-controls">
-            <button className="btn btn-primary">Add Employee</button>
+            <button className="btn btn-primary" onClick={handleAddEmployee}>Add Employee</button>
             <input
               type="text"
               placeholder="Search Employees..."
@@ -51,8 +59,11 @@ const EmployeeManagementApp = () => {
             fetchEmployees={fetchEmployees}
             employees = {employeeData.employees}
             pagination = {employeeData.pagination}
+          
             />
           </div>
+
+          <AddEmployee showModal={showModal} setShowModal= {setShowModal}/>
         </div>
       </div>
     </div>
