@@ -1,12 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../App.css";
 
-const EmployeeTable = () => {
+const EmployeeTable = ({ employees, pagination, fetchEmployees }) => {
   // header of table (heading render)
   const headers = ["Name", "Email", "Phone", "Department", "Actions"];
+  const { currentPage, totalPages } = pagination;
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePagination(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      handlePagination(currentPage - 1);
+    }
+  };
+
+  const handlePagination = (currentPage) => {
+    fetchEmployees("", currentPage, 5);
+  };
 
   // body of table (row render)
-  const TableRow = (employee) => {
+  const TableRow = ({ employee }) => {
     return (
       <tr>
         <td>
@@ -14,12 +32,12 @@ const EmployeeTable = () => {
             to={`/employee/${employee.id}`}
             className="text-decoration-none"
           >
-            {"karan"}
+            {employee.name}
           </Link>
         </td>
-        <td>{"karan@gmail.com"}</td>
-        <td>{"9851593699"}</td>
-        <td>{"IT"}</td>
+        <td> {employee.email}</td>
+        <td>{employee.phone}</td>
+        <td>{employee.department}</td>
         <td>
           <i
             className="bi bi-pencil-fill text-warning me-4"
@@ -39,21 +57,60 @@ const EmployeeTable = () => {
       </tr>
     );
   };
-
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1
+  );
   return (
-    <table className="table table-striped">
-      <thead>
-        <tr>
-          {headers.map((header, i) => (
-            <th key={i}>{header}</th>
+    <div className="table-responsive-wrapper">
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            {headers.map((header, i) => (
+              <th key={i}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {employees.map((emp) => (
+            <TableRow key={emp._id} employee={emp} />
           ))}
-        </tr>
-      </thead>
+        </tbody>
+      </table>
 
-      <tbody>
-        <TableRow />
-      </tbody>
-    </table>
+      <div className="d-flex justify-content-between align-items-center my-3">
+        <span className="badge bg-primary">
+          Page {currentPage} of {totalPages}
+        </span>
+        <div>
+          <button
+            className="btn btn-outline-primary me-2"
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          {pageNumbers.map((page) => (
+            <button
+              key={page}
+              className={`btn btn-outline-primary me-1 ${
+                currentPage === page ? "active" : ""
+              }`}
+              onClick={() => handlePagination(page)}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            className="btn btn-outline-primary ms-2"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
