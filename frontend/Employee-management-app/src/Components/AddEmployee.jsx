@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { CreateEmployee } from "../api";
+import { notify } from "../utilis";
 
-const AddEmployee = ({ showModal, setShowModal }) => {
+const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
   const handleModalClose = () => {
     setShowModal(false);
-    resetEmployeeStates();
   };
 
   const [employee, setEmployee] = useState({
@@ -13,6 +14,16 @@ const AddEmployee = ({ showModal, setShowModal }) => {
     department: "",
     salary: "",
   });
+
+  const resetEmployeeStates = () => {
+    setEmployee({
+      name: "",
+      email: "",
+      phone: "",
+      department: "",
+      salary: "",
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,10 +37,27 @@ const AddEmployee = ({ showModal, setShowModal }) => {
     });
   };
 
-  const handleAddEmployee = (e) => {
+  const handleAddEmployee = async (e) => {
     e.preventDefault();
     console.log(employee);
+
+    try {
+      const { success, message } = await CreateEmployee(employee);
+      console.log(success, message);
+      if (success) {
+        notify(message, "success");
+      } else {
+        notify(message, "error");
+      }
+      setShowModal(false);
+      resetEmployeeStates();
+      fetchEmployees();
+    } catch (error) {
+      console.log(error);
+      notify("Failed to create Employee", "error");
+    }
   };
+
   return (
     <div
       className={`modal ${showModal ? "d-block" : ""}`}

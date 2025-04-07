@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import EmployeeTable from "./EmployeeTable";
-import { GetAllEmployees } from "../api";
+import { CreateEmployee, GetAllEmployees } from "../api";
 import "../App.css";
 import AddEmployee from "./AddEmployee";
+import { ToastContainer } from "react-toastify";
+import { notify } from "../utilis";
 
 const EmployeeManagementApp = () => {
   const [showModal, setShowModal] = useState(false);
+
   const [employeeData, setEmployeeData] = useState({
     employees: [],
     pagination: {
@@ -17,6 +20,8 @@ const EmployeeManagementApp = () => {
   });
 
   const fetchEmployees = async (search = "", page = 1, limit = 5) => {
+    // console.log("fetchEmployees");
+
     try {
       const data = await GetAllEmployees(search, page, limit);
       setEmployeeData(data);
@@ -26,11 +31,9 @@ const EmployeeManagementApp = () => {
     }
   };
 
-
-  const handleAddEmployee =  ()=>{
+  const handleAddEmployee = () => {
     setShowModal(true);
-  }
-
+  };
 
   useEffect(() => {
     fetchEmployees();
@@ -45,7 +48,9 @@ const EmployeeManagementApp = () => {
           style={{ maxWidth: "900px" }}
         >
           <div className="d-flex justify-content-between mb-3 employee-header-controls">
-            <button className="btn btn-primary" onClick={handleAddEmployee}>Add Employee</button>
+            <button className="btn btn-primary" onClick={handleAddEmployee}>
+              Add Employee
+            </button>
             <input
               type="text"
               placeholder="Search Employees..."
@@ -56,16 +61,24 @@ const EmployeeManagementApp = () => {
           {/* Wrap table inside responsive scrollable div */}
           <div className="table-responsive-wrapper">
             <EmployeeTable
-            fetchEmployees={fetchEmployees}
-            employees = {employeeData.employees}
-            pagination = {employeeData.pagination}
-          
+              fetchEmployees={fetchEmployees}
+              employees={employeeData.employees}
+              pagination={employeeData.pagination}
             />
           </div>
 
-          <AddEmployee showModal={showModal} setShowModal= {setShowModal}/>
+          <AddEmployee
+            fetchEmployees={fetchEmployees}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
     </div>
   );
 };

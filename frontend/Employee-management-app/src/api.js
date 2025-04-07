@@ -17,3 +17,26 @@ export const GetAllEmployees = async (search = "", page = 1, limit = 5) => {
     return err;
   }
 };
+
+// createEmployee by form
+export const CreateEmployee = async (employeeData) => {
+  const formData = new FormData();
+
+  for (const key in employeeData) {
+    formData.append(key, employeeData[key]);
+  }
+
+  try {
+   
+    const res = await fetch("http://localhost:3002/api/employee", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error while creating employee:", error);
+    throw error;
+  }
+};

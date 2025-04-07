@@ -55,7 +55,8 @@ const getAllEmployees = async (req, res) => {
     const emps = await EmployeeModel.find(searchCriteria)
       .skip(skip)
       .limit(limit)
-      .sort({ updatedAt: -1 });
+      .sort({ updatedAt: -1, _id: -1 }); // ✅ Fix overlap issue
+
 
     if (emps.length === 0) {
       return res.status(404).json({
