@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3002";
+const BASE_URL = "https://ems-vwmz.onrender.com/";
 
 export const GetAllEmployees = async (search = "", page = 1, limit = 5) => {
   const url = `${BASE_URL}/api/employee/?search=${search}&page=${page}&limit=${limit}`;
@@ -27,7 +27,7 @@ export const CreateEmployee = async (employeeData) => {
   }
 
   try {
-    const res = await fetch("http://localhost:3002/api/employee", {
+    const res = await fetch("https://ems-vwmz.onrender.com/api/employee", {
       method: "POST",
       body: formData,
     });
@@ -48,7 +48,7 @@ export const updateEmployee = async (employeeData, id) => {
   }
 
   try {
-    const res = await fetch(`http://localhost:3002/api/employee/${id}`, {
+    const res = await fetch(`https://ems-vwmz.onrender.com/api/employee/${id}`, {
       method: "PUT",
       body: formData,
     });
@@ -63,7 +63,7 @@ export const updateEmployee = async (employeeData, id) => {
 
 export const DeleteEmployee = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3002/api/employee/${id}`, {
+    const res = await fetch(`https://ems-vwmz.onrender.com/api/employee/${id}`, {
       method: "DELETE",
     });
 
@@ -77,7 +77,7 @@ export const DeleteEmployee = async (id) => {
 
 export const GetAllEmployeesById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3002/api/employee/${id}`, {
+    const res = await fetch(`https://ems-vwmz.onrender.com/api/employee/${id}`, {
       method: "GET",
     });
 
