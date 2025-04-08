@@ -56,6 +56,11 @@ const EmployeeManagementApp = () => {
     }
   };
 
+  const handleSearch = (e)=>{
+    const term = e.target.value;
+    fetchEmployees(term)
+  }
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -76,6 +81,7 @@ const EmployeeManagementApp = () => {
               type="text"
               placeholder="Search Employees..."
               className="form-control width-adjust mx-auto my-auto "
+              onChange={handleSearch}
             />
           </div>
 
