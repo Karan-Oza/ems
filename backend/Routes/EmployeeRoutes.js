@@ -1,7 +1,7 @@
 const {
   createEmployee,
   getAllEmployees,
-  getAllEmployeeById,
+  getEmployeeById,
   deleteEmployeeById,
   updateEmployeeId,
 } = require("../Controllers/EmployeeController");
@@ -16,10 +16,14 @@ routes.get("/", getAllEmployees);
 routes.post("/", cloudinaryFileUploader.single("profileImage"), createEmployee);
 
 // update emp by id
-routes.put("/:id", cloudinaryFileUploader.single("profileImage"), updateEmployeeId);
+routes.put(
+  "/:id",
+  cloudinaryFileUploader.single("profileImage"),
+  updateEmployeeId
+);
 
 // get emp by id (update)
-routes.post("/:id", getAllEmployeeById);
+routes.get("/:id", getEmployeeById);
 
 // delete emp by id
 routes.delete("/:id", deleteEmployeeById);

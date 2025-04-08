@@ -2,7 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
 
-const EmployeeTable = ({ employees, pagination, fetchEmployees }) => {
+const EmployeeTable = ({
+  employees,
+  pagination,
+  fetchEmployees,
+  handleupdateEmployee,
+  handledeleteEmployee,
+}) => {
   // header of table (heading render)
   const headers = ["Name", "Email", "Phone", "Department", "Actions"];
   const { currentPage, totalPages } = pagination;
@@ -29,7 +35,7 @@ const EmployeeTable = ({ employees, pagination, fetchEmployees }) => {
       <tr>
         <td>
           <Link
-            to={`/employee/${employee.id}`}
+            to={`/employee/${employee._id}`}
             className="text-decoration-none"
           >
             {employee.name}
@@ -45,6 +51,7 @@ const EmployeeTable = ({ employees, pagination, fetchEmployees }) => {
             data-bs-toggle="tooltip"
             data-bs-placement="top"
             title="Edit"
+            onClick={() => handleupdateEmployee(employee)}
           ></i>
           <i
             className="bi bi-trash-fill text-danger"
@@ -52,6 +59,7 @@ const EmployeeTable = ({ employees, pagination, fetchEmployees }) => {
             data-bs-toggle="tooltip"
             data-bs-placement="top"
             title="Delete"
+            onClick={() => handledeleteEmployee(employee._id)}
           ></i>
         </td>
       </tr>

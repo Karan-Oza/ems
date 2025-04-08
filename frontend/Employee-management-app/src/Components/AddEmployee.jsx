@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { CreateEmployee } from "../api";
+import { CreateEmployee, updateEmployee } from "../api";
 import { notify } from "../utilis";
 
-const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
-
+const AddEmployee = ({
+  showModal,
+  setShowModal,
+  fetchEmployees,
+  updateEmpObj,
+  setUpdateEmpObj,
+}) => {
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
@@ -14,6 +16,9 @@ const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
     department: "",
     salary: "",
   });
+
+  const [updateMode, setupdateMode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const resetEmployeeStates = () => {
     setEmployee({
@@ -23,6 +28,13 @@ const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
       department: "",
       salary: "",
     });
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setupdateMode(false);
+    setUpdateEmpObj(null);
+    resetEmployeeStates();
   };
 
   const handleChange = (e) => {
@@ -39,24 +51,37 @@ const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
-    console.log(employee);
+    setLoading(true);
 
     try {
-      const { success, message } = await CreateEmployee(employee);
-      console.log(success, message);
-      if (success) {
-        notify(message, "success");
-      } else {
-        notify(message, "error");
-      }
-      setShowModal(false);
-      resetEmployeeStates();
-      fetchEmployees();
+      const { success, message } = updateMode
+        ? await updateEmployee(employee, employee._id)
+        : await CreateEmployee(employee);
+
+      setTimeout(() => {
+        setLoading(false);
+        notify(message, success ? "success" : "error");
+        if (success) {
+          setShowModal(false);
+          resetEmployeeStates();
+          fetchEmployees();
+        }
+      }, 500);
     } catch (error) {
-      console.log(error);
-      notify("Failed to create Employee", "error");
+      console.error(error);
+      setTimeout(() => {
+        setLoading(false);
+        notify("Failed to create Employee", "error");
+      }, 500);
     }
   };
+
+  useEffect(() => {
+    if (updateEmpObj) {
+      setupdateMode(true);
+      setEmployee(updateEmpObj);
+    }
+  }, [updateEmpObj]);
 
   return (
     <div
@@ -68,15 +93,17 @@ const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Add employee</h5>
+            <h5 className="modal-title">
+              {updateMode ? "Update Employee" : "Add Employee"}
+            </h5>
             <button
               type="button"
               className="btn-close"
-              onClick={() => handleModalClose()}
+              onClick={handleModalClose}
             ></button>
           </div>
           <div className="modal-body">
-            <form onSubmit={(e) => handleAddEmployee(e)}>
+            <form onSubmit={handleAddEmployee}>
               <div className="mb-3">
                 <label className="form-label">Name</label>
                 <input
@@ -142,8 +169,25 @@ const AddEmployee = ({ showModal, setShowModal, fetchEmployees }) => {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    {updateMode ? "Updating..." : "Saving..."}
+                  </>
+                ) : updateMode ? (
+                  "Update Employee"
+                ) : (
+                  "Save"
+                )}
               </button>
             </form>
           </div>

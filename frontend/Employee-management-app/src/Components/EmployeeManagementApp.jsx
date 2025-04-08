@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeTable from "./EmployeeTable";
-import { CreateEmployee, GetAllEmployees } from "../api";
+import { CreateEmployee, DeleteEmployee, GetAllEmployees } from "../api";
 import "../App.css";
 import AddEmployee from "./AddEmployee";
 import { ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import { notify } from "../utilis";
 
 const EmployeeManagementApp = () => {
   const [showModal, setShowModal] = useState(false);
-
+  const [updateEmpObj, setUpdateEmpObj] = useState(null);
   const [employeeData, setEmployeeData] = useState({
     employees: [],
     pagination: {
@@ -33,6 +33,27 @@ const EmployeeManagementApp = () => {
 
   const handleAddEmployee = () => {
     setShowModal(true);
+  };
+
+  const handleupdateEmployee = (empObj) => {
+    console.log("Click ", empObj);
+    setShowModal(true);
+    setUpdateEmpObj(empObj);
+  };
+
+  const handledeleteEmployee = async (id) => {
+    try {
+      const { success, message } = await DeleteEmployee(id);
+      if (success) {
+        notify(message, "success");
+      } else {
+        notify(message, "error");
+      }
+      fetchEmployees();
+    } catch (err) {
+      console.error(err);
+      notify("Failed to delete Employee", "error");
+    }
   };
 
   useEffect(() => {
@@ -64,13 +85,17 @@ const EmployeeManagementApp = () => {
               fetchEmployees={fetchEmployees}
               employees={employeeData.employees}
               pagination={employeeData.pagination}
+              handleupdateEmployee={handleupdateEmployee}
+              handledeleteEmployee={handledeleteEmployee}
             />
           </div>
 
           <AddEmployee
+            updateEmpObj={updateEmpObj}
             fetchEmployees={fetchEmployees}
             showModal={showModal}
             setShowModal={setShowModal}
+            setUpdateEmpObj={setUpdateEmpObj}
           />
         </div>
       </div>
