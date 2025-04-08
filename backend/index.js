@@ -10,7 +10,7 @@ const EmployeeRouter = require("./Routes/EmployeeRoutes");
 
 // ✅ Apply CORS before other middleware or routes
 app.use(cors({
-  origin: 'https://darling-monstera-1a9b86.netlify.app',
+  origin: 'https://classy-starlight-83c3e4.netlify.app',
   credentials: true,
 }));
 
